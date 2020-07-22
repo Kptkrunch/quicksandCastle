@@ -4,6 +4,7 @@ import CastleWall from '../assets/sprites/castleWall.png';
 import StoneWall from '../assets/sprites/stoneWall.png';
 import PlatformLong from '../assets/sprites/platformLong.png';
 import PlatformShort from '../assets/sprites/platformShort.png';
+import TreasureChest from '../assets/sprites/treasureChest.png';
 
 class playGame extends Phaser.Scene {
   constructor() {
@@ -16,6 +17,7 @@ class playGame extends Phaser.Scene {
     this.load.image('stoneWall', StoneWall);
     this.load.image('platformLong', PlatformLong);
     this.load.image('platformShort', PlatformShort);
+    this.load.image('treasureChest', TreasureChest);
   }
   create() {
 
@@ -29,6 +31,9 @@ class playGame extends Phaser.Scene {
 
     const stoneWall = this.matter.add.image(100, 100, 'stoneWall', null, 
     { chamfer: 16, density: 30, friction: 0.9, frictionStatic: 0.75}).setCollisionGroup(canDrag);
+
+    const treasureChest = this.matter.add.image(300, 100, 'treasureChest', { chamfer: 16, density: 50, friction: 0.75, frictionStatic: 0.75}).setCollisionGroup(canDrag);
+
     // platforms that blocks rest on
     const platformLong = this.matter.add.image(300, 500, 'platformLong', null, 
     { isStatic: true, friction: 0.9, frictionStatic: 0.75});
