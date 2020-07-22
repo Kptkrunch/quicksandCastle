@@ -23,16 +23,18 @@ class playGame extends Phaser.Scene {
 
     // mouse control group
     var canDrag = this.matter.world.nextGroup();
+    var cannotDrag = this.matter.world.nextGroup();
 
     // world items
     // main wall building block
     const castleWall = this.matter.add.image(100, 100, 'castleWall', null, 
-    { chamfer: 16, density: 30, friction: 0.9, frictionStatic: 0.75}).setCollisionGroup(canDrag);
+    { chamfer: 16, density: 30, friction: 0.9, frictionStatic: 0.75, restitution: 0.0}).setCollisionGroup(canDrag);
 
     const stoneWall = this.matter.add.image(100, 100, 'stoneWall', null, 
-    { chamfer: 16, density: 30, friction: 0.9, frictionStatic: 0.75}).setCollisionGroup(canDrag);
+    { chamfer: 16, density: 30, friction: 0.9, frictionStatic: 0.75, restitution: 0.0}).setCollisionGroup(canDrag);
 
-    const treasureChest = this.matter.add.image(300, 100, 'treasureChest', { chamfer: 16, density: 50, friction: 0.75, frictionStatic: 0.75}).setCollisionGroup(canDrag);
+    const treasureChest = this.matter.add.image(300, 100, 'treasureChest', 
+    { chamfer: 16, density: 50, friction: 0.75, frictionStatic: 0.75, restitution: 0.0}).setCollisionGroup(canDrag);
 
     // platforms that blocks rest on
     const platformLong = this.matter.add.image(300, 500, 'platformLong', null, 
@@ -41,6 +43,13 @@ class playGame extends Phaser.Scene {
     const groundSand = this.add.image(0, 450, 'groundSand').setOrigin(0, 0);
     
 
+
+
+
+
+
+    
+    // allows the group 'canDrag' to be movable with the mouse
     this.matter.add.mouseSpring({ length: 1, stiffness: 0.6, collisionFilter: { group: canDrag } });
 
     // tween effects
