@@ -11,7 +11,10 @@ export default class App extends Component {
 	render() {
 		return (
 			<div style={{ textAlign: "center" }}>
-				<h1>Quicksand Castle</h1>
+				<div className="background">
+					<h1>Quicksand Castle</h1>
+					<div id="phaser"></div>	
+				</div>
 			</div>
 		);
 	}
