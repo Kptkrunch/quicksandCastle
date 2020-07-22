@@ -8,7 +8,7 @@ export const config = {
     type: Phaser.AUTO,
     parent: 'phaser',
     backgroundColor: '#1b1464',
-    width: 800,
+    width: 1200,
     height: 600,
     physics: {
         default: 'matter',
