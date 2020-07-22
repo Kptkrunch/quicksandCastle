@@ -6,11 +6,10 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 module.exports = {
   mode: "development",
   devtool: "eval-source-map",
-  entry: './src/index.js',
+  entry: "./src/index.js", //do we need this?
   output: {
-
     path: path.resolve("dist"),
-    filename: 'bundle.js'
+    filename: "index_bundle.js"
   },
   module: {
     rules: [
@@ -26,6 +25,11 @@ module.exports = {
         }
       },
       {
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        use: "babel-loader"
+      },
+      {
         test: [/\.vert$/, /\.frag$/],
         use: "raw-loader"
       },
@@ -36,15 +40,15 @@ module.exports = {
     ]
   },
   plugins: [
-    new CleanWebpackPlugin({
-      root: path.resolve(__dirname, "../")
-    }),
+    new CleanWebpackPlugin(),
     new webpack.DefinePlugin({
       CANVAS_RENDERER: JSON.stringify(true),
       WEBGL_RENDERER: JSON.stringify(true)
     }),
     new HtmlWebpackPlugin({
-      template: "./index.html"
+      template: "./index.html",
+      filename: "index.html",
+      inject: "body"
     })
   ]
 };
