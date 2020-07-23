@@ -6,6 +6,7 @@
   "scripts": {
     "build": "webpack --config webpack/prod.js ",
     "start": "webpack-dev-server -w --config webpack/base.js --open",
+    "server": "node server/server.js",
     "test": "jest"
   },
   "repository": {

@@ -1,9 +1,9 @@
 import Phaser from 'phaser';
-import GroundSand from '../assets/sprites/groundSand.png';
+import Background from '../assets/sprites/background.jpg';
+import Foreground from '../assets/sprites/foreground.png';
 import CastleWall from '../assets/sprites/castleWall.png';
 import StoneWall from '../assets/sprites/stoneWall.png';
 import PlatformLong from '../assets/sprites/platformLong.png';
-import PlatformShort from '../assets/sprites/platformShort.png';
 import TreasureChest from '../assets/sprites/treasureChest.png';
 import CastleBase from '../assets/sprites/castleBase.png';
 
@@ -12,8 +12,7 @@ var castleWall;
 var castleBase;
 var stoneWall;
 var platformLong;
-var platformShort;
-var groundSand;
+var foreground;
 
 class playGame extends Phaser.Scene {
   constructor() {
@@ -22,11 +21,13 @@ class playGame extends Phaser.Scene {
 
   preload() {
     // assets to prepare
+    this.load.image('background', Background);
+    this.load.image('foreground', Foreground);
     this.load.image('castleWall', CastleWall);
-    this.load.image('groundSand', GroundSand);
+    // this.load.image('groundSand', GroundSand);
     this.load.image('stoneWall', StoneWall);
     this.load.image('platformLong', PlatformLong);
-    this.load.image('platformShort', PlatformShort);
+    // this.load.image('platformShort', PlatformShort);
     this.load.image('treasureChest', TreasureChest);
     this.load.image('castleBase', CastleBase);
   }
@@ -42,7 +43,8 @@ class playGame extends Phaser.Scene {
 
     // ? world items ===========================================
     // ? =======================================================
-
+    this.add.image(0, 0, 'background')
+      .setOrigin(0, 0);
     // const objOptions = { chamfer: 16, density: 30, friction: 0.9, frictionStatic: 0.75, restitution: 0};
     castleWall = this.matter.add.image(800, 100, 'castleWall', null, 
       { chamfer: 16, density: 30, friction: 0.9, frictionStatic: 0.75, frictionAir: 0.025, restitution: 0, label: 'castleWall'})
@@ -62,15 +64,17 @@ class playGame extends Phaser.Scene {
       .setCollisionCategory(blocks);
 
     // ? platforms that blocks rest on
-    platformLong = this.matter.add.image(600, 500, 'platformLong', null, 
+    platformLong = this.matter.add.image(600, 550, 'platformLong', null, 
       { isStatic: true, friction: 0.9, frictionStatic: 0.75, label: 'platformLong' })
-      .setCollisionGroup(platforms);
+      .setCollisionGroup(platforms)
+      .setVisible(false);
+
     // starting platform for blocks
-    castleBase = this.matter.add.image(800, 400, 'castleBase', null, 
+    castleBase = this.matter.add.image(800, 450, 'castleBase', null, 
       { isStatic: false, chamfer: 10, density: 35, friction: 1.0, restitution: 0 })
 
     // ? the ground that the player sees
-    groundSand = this.add.image(0, 450, 'groundSand', {isStatic: true}).setOrigin(0, 0);
+    foreground = this.add.image(0, 475, 'foreground', {isStatic: true}).setOrigin(0, 0);
 
     // ? collision events ======================================
     // ? =======================================================
@@ -80,13 +84,12 @@ class playGame extends Phaser.Scene {
       if(bodyB.label === 'platformLong') {
 
         event.pairs[0].bodyA.gameObject.setTint('0x757575');
-        // event.pairs[0].bodyA.gameObject.isStatic(true);
         event.pairs[0].bodyA.gameObject.setCollisionGroup(cannotDrag);
       } 
     });
 
     // allows the group 'canDrag' to be movable with the mouse
-    this.matter.add.mouseSpring({ length: 1, stiffness: 0.6, collisionFilter: { group: canDrag } });
+    this.matter.add.mouseSpring({ length: 1, stiffness: 0.8, collisionFilter: { group: canDrag } });
 
     // ? tweens ================================================
     // ? =======================================================
@@ -101,11 +104,6 @@ class playGame extends Phaser.Scene {
         ease: 'power2',
       });
     }, 10000);
-
-  }
-
-  update() {
-
   }
 }
 
