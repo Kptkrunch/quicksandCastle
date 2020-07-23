@@ -16,7 +16,7 @@ var platformLong;
 var foreground;
 var background;
 
-export class Level1 extends Phaser.Scene {
+export default class Level1 extends Phaser.Scene {
   constructor() {
     super({
       key: sceneTracker.scenes.level1
@@ -32,10 +32,16 @@ export class Level1 extends Phaser.Scene {
     this.load.image('platformLong', PlatformLong);
     this.load.image('treasureChest', TreasureChest);
     this.load.image('castleBase', CastleBase);
+    this.load.audio('gameMusic', '../public/assets/music/desertTrack.mp3');
+    this.load.audio('gameMusic', '../public/assets/sounds/crateSound1.mp3');
+    this.load.audio('gameMusic', '../public/assets/sounds/crateSound2.mp3');
+    this.load.audio('gameMusic', '../public/assets/sounds/blockGrabSound.mp3');
+    this.load.audio('gameMusic', '../public/assets/sounds/castleWallSound.mp3');
+    this.load.audio('gameMusic', '../public/assets/sounds/hardCrateSound.mp3');
+    this.load.audio('gameMusic', '../public/assets/sounds/metalBlockSound.mp3');
   }
 
   create() {
-
     // set the group for what items can be manipulated
     var canDrag = this.matter.world.nextGroup();
     var cannotDrag = this.matter.world.nextGroup();
@@ -132,5 +138,13 @@ export class Level1 extends Phaser.Scene {
         ease: 'power2',
       });
     }, 10000);
+
+    // ? Sounds ================================================
+    // ? =======================================================
+
+    this.sound.pauseOnBlur = false;
+    this.sound.play('gameMusic', {
+        loop: true
+    });
   }
 }

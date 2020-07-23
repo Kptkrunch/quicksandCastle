@@ -1,8 +1,8 @@
-import Phaser from 'phaser';
+// import Phaser from 'phaser';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './components/App.jsx';
-import { LoadScene } from './phaser/load';
+import LoadScene from './phaser/load';
 
 const config = {
     type: Phaser.AUTO,
