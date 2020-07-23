@@ -7,6 +7,14 @@ import PlatformShort from '../assets/sprites/platformShort.png';
 import TreasureChest from '../assets/sprites/treasureChest.png';
 import CastleBase from '../assets/sprites/castleBase.png';
 
+var treasureChest;
+var castleWall;
+var castleBase;
+var stoneWall;
+var platformLong;
+var platformShort;
+var groundSand;
+
 class playGame extends Phaser.Scene {
   constructor() {
     super('PlayGame');
@@ -36,58 +44,46 @@ class playGame extends Phaser.Scene {
     // ? =======================================================
 
     // const objOptions = { chamfer: 16, density: 30, friction: 0.9, frictionStatic: 0.75, restitution: 0};
-    const castleWall = this.matter.add.image(800, 100, 'castleWall', null, { chamfer: 16, density: 30, friction: 0.9, frictionStatic: 0.75, frictionAir: 0.2, restitution: 0}).setCollisionGroup(canDrag);
-    const stoneWall = this.matter.add.image(750, 100, 'stoneWall', null, { chamfer: 16, density: 30, friction: 0.6, frictionStatic: 0.75, frictionAir: 0.2, restitution: 0}).setCollisionGroup(canDrag);
-    const treasureChest = this.matter.add.image(875, 100, 'treasureChest', { chamfer: 16, density: 40, friction: 0.6, frictionStatic: 9.0, frictionAir: 0.2, restitution: 0}).setCollisionGroup(canDrag);
+    castleWall = this.matter.add.image(800, 100, 'castleWall', null, 
+      { chamfer: 16, density: 30, friction: 0.9, frictionStatic: 0.75, frictionAir: 0.025, restitution: 0, label: 'castleWall'})
+      .setCollisionGroup(canDrag)
+      .setCollisionCategory(blocks);
+
+    // large stone block
+    stoneWall = this.matter.add.image(750, 100, 'stoneWall', null, 
+      { chamfer: 16, density: 30, friction: 0.6, frictionStatic: 0.75, frictionAir: 0.025, restitution: 0, label: 'stoneWall'})
+      .setCollisionGroup(canDrag)
+      .setCollisionCategory(blocks);
+
+    // treasure chest win condition piece
+    treasureChest = this.matter.add.image(875, 100, 'treasureChest', 
+      { chamfer: 16, density: 40, friction: 0.6, frictionStatic: 9.0, frictionAir: 0.3, restitution: 0, label: 'treasureChest'})
+      .setCollisionGroup(canDrag)
+      .setCollisionCategory(blocks);
 
     // ? platforms that blocks rest on
-    const platformLong = this.matter.add.image(600, 500, 'platformLong', null, 
-      { isStatic: true, friction: 0.9, frictionStatic: 0.75 });
-
-    const castleBase = this.matter.add.image(800, 400, 'castleBase', null, 
-      { isStatic: false, chamfer: 10, density: 35, friction: 1.0, restitution: 0 });
+    platformLong = this.matter.add.image(600, 500, 'platformLong', null, 
+      { isStatic: true, friction: 0.9, frictionStatic: 0.75, label: 'platformLong' })
+      .setCollisionGroup(platforms);
+    // starting platform for blocks
+    castleBase = this.matter.add.image(800, 400, 'castleBase', null, 
+      { isStatic: false, chamfer: 10, density: 35, friction: 1.0, restitution: 0 })
 
     // ? the ground that the player sees
-    const groundSand = this.add.image(0, 450, 'groundSand', {isStatic: true}).setOrigin(0, 0);
-
+    groundSand = this.add.image(0, 450, 'groundSand', {isStatic: true}).setOrigin(0, 0);
 
     // ? collision events ======================================
     // ? =======================================================
 
-    castleWall.setCollisionCategory(blocks);
-    stoneWall.setCollisionCategory(blocks);
-    treasureChest.setCollisionCategory(blocks);
-    platformLong.setCollisionGroup(platforms);
-
-
     this.matter.world.on('collisionstart', function (event, bodyA, bodyB) {
       
-
-      console.log(bodyB)
-      if(bodyB.id === 4) {
+      if(bodyB.label === 'platformLong') {
 
         event.pairs[0].bodyA.gameObject.setTint('0x757575');
         // event.pairs[0].bodyA.gameObject.isStatic(true);
         event.pairs[0].bodyA.gameObject.setCollisionGroup(cannotDrag);
-        // event.pairs[0].bodyA.gameObject.frictionAir = .6;
-      }
-
+      } 
     });
-
-    // this.matter.world.on('collisionactive', function (event, bodyA, bodyB) {
-
-    //   bodyA = blocks;
-    //   bodyB = platforms;
-
-    //   event.pairs[0].bodyA.gameObject.setTint(0xff0000);
-    //   event.pairs[0].bodyA.timeScale = .1;
-    // });
-
-    // this.matter.world.on('collisionEnd', function (event, bodyA, bodyB) {
-    //   bodyA = blocks;
-    //   bodyB = platforms;
-    //   event.pairs[0].bodyA.timeScale = 1.0;
-    // });
 
     // allows the group 'canDrag' to be movable with the mouse
     this.matter.add.mouseSpring({ length: 1, stiffness: 0.6, collisionFilter: { group: canDrag } });
@@ -95,6 +91,7 @@ class playGame extends Phaser.Scene {
     // ? tweens ================================================
     // ? =======================================================
 
+    // causes the ground to start sinking
     setTimeout(() => {
 
       this.tweens.add({
@@ -108,7 +105,7 @@ class playGame extends Phaser.Scene {
   }
 
   update() {
-    
+
   }
 }
 
