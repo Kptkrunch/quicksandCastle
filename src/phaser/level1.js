@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { sceneTracker } from '../sceneTracker';
 import Background from '../assets/sprites/background.jpg';
 import Foreground from '../assets/sprites/foreground.png';
 import CastleWall from '../assets/sprites/castleWall.png';
@@ -13,10 +14,13 @@ var castleBase;
 var stoneWall;
 var platformLong;
 var foreground;
+var background;
 
 export class Level1 extends Phaser.Scene {
   constructor() {
-    super('PlayGame');
+    super({
+      key: sceneTracker.scenes.level1
+    });
   }
 
   preload() {
@@ -24,16 +28,13 @@ export class Level1 extends Phaser.Scene {
     this.load.image('background', Background);
     this.load.image('foreground', Foreground);
     this.load.image('castleWall', CastleWall);
-    // this.load.image('groundSand', GroundSand);
     this.load.image('stoneWall', StoneWall);
     this.load.image('platformLong', PlatformLong);
-    // this.load.image('platformShort', PlatformShort);
     this.load.image('treasureChest', TreasureChest);
     this.load.image('castleBase', CastleBase);
   }
 
   create() {
-
 
     // set the group for what items can be manipulated
     var canDrag = this.matter.world.nextGroup();
@@ -46,23 +47,24 @@ export class Level1 extends Phaser.Scene {
     // ? world items ===========================================
     // ? =======================================================
 
-    this.add.image(0, 0, 'background')
+    background = this.add.image(0, 0, 'background')
       .setOrigin(0, 0);
+
     // const objOptions = { chamfer: 16, density: 30, friction: 0.9, frictionStatic: 0.75, restitution: 0};
     castleWall = this.matter.add.image(800, 100, 'castleWall', null, 
-      { chamfer: 16, density: 30, friction: 0.9, frictionStatic: 0.75, frictionAir: 0.025, restitution: 0, label: 'castleWall'})
+      { chamfer: 16, density: 30, friction: 0.9, frictionStatic: 0.75, frictionAir: 0.05, restitution: 0, label: 'castleWall'})
       .setCollisionGroup(canDrag)
       .setCollisionCategory(blocks);
 
     // large stone block
     stoneWall = this.matter.add.image(750, 100, 'stoneWall', null, 
-      { chamfer: 16, density: 30, friction: 0.6, frictionStatic: 0.75, frictionAir: 0.025, restitution: 0, label: 'stoneWall'})
+      { chamfer: 16, density: 30, friction: 0.6, frictionStatic: 0.75, frictionAir: 0.05, restitution: 0, label: 'stoneWall'})
       .setCollisionGroup(canDrag)
       .setCollisionCategory(blocks);
 
     // treasure chest win condition piece
     treasureChest = this.matter.add.image(875, 100, 'treasureChest', 
-      { chamfer: 16, density: 40, friction: 0.6, frictionStatic: 9.0, frictionAir: 0.3, restitution: 0, label: 'treasureChest'})
+      { chamfer: 16, density: 40, friction: 0.6, frictionStatic: .75, frictionAir: 0.3, restitution: 0, label: 'treasureChest'})
       .setCollisionGroup(canDrag)
       .setCollisionCategory(blocks);
 
@@ -84,6 +86,7 @@ export class Level1 extends Phaser.Scene {
 
     // ? collision events ======================================
     // ? =======================================================
+
     // what objects collide with 
     stoneWall.setCollidesWith([ blocks, platforms ]);
     castleWall.setCollidesWith([ blocks, platforms ]);
@@ -92,22 +95,22 @@ export class Level1 extends Phaser.Scene {
     foreground.setCollidesWith([noCollide]);
     platformLong.setCollidesWith([blocks, platforms]);
 
-    // this.matter.world.on('collisionstart', function (event, bodyA, bodyB) {
-      
-    //   if(bodyB.label === 'platformLong') {
-
-    //     event.pairs[0].bodyA.gameObject.setTint('0x757575');
-    //     event.pairs[0].bodyA.gameObject.setCollisionGroup(cannotDrag);
-    //   } 
-    // });
     this.matter.world.on('collisionstart', function (event, bodyA, bodyB) {
       
-      if(bodyB.label === 'foreground') {
+      if(bodyB.label === 'platformLong') {
 
         event.pairs[0].bodyA.gameObject.setTint('0x757575');
         event.pairs[0].bodyA.gameObject.setCollisionGroup(cannotDrag);
       } 
     });
+    // this.matter.world.on('collisionstart', function (event, bodyA, bodyB) {
+      
+    //   if(bodyB.label === 'foreground') {
+
+    //     event.pairs[0].bodyA.gameObject.setTint('0x757575');
+    //     event.pairs[0].bodyA.gameObject.setCollisionGroup(cannotDrag);
+    //   } 
+    // });
 
     // this.matter.overlap(stoneWall, foreground, () => {
     //   console.log(this)
@@ -131,5 +134,3 @@ export class Level1 extends Phaser.Scene {
     }, 10000);
   }
 }
-
-export default Level1;
