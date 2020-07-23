@@ -14,7 +14,7 @@ var stoneWall;
 var platformLong;
 var foreground;
 
-class playGame extends Phaser.Scene {
+export class Level1 extends Phaser.Scene {
   constructor() {
     super('PlayGame');
   }
@@ -84,27 +84,34 @@ class playGame extends Phaser.Scene {
 
     // ? collision events ======================================
     // ? =======================================================
-
+    // what objects collide with 
     stoneWall.setCollidesWith([ blocks, platforms ]);
     castleWall.setCollidesWith([ blocks, platforms ]);
     treasureChest.setCollidesWith([ blocks, platforms ]);
     castleBase.setCollidesWith([ blocks, platforms ]);
     foreground.setCollidesWith([noCollide]);
     platformLong.setCollidesWith([blocks, platforms]);
-    
+
+    // this.matter.world.on('collisionstart', function (event, bodyA, bodyB) {
+      
+    //   if(bodyB.label === 'platformLong') {
+
+    //     event.pairs[0].bodyA.gameObject.setTint('0x757575');
+    //     event.pairs[0].bodyA.gameObject.setCollisionGroup(cannotDrag);
+    //   } 
+    // });
     this.matter.world.on('collisionstart', function (event, bodyA, bodyB) {
       
-      if(bodyB.label === 'platformLong') {
+      if(bodyB.label === 'foreground') {
 
         event.pairs[0].bodyA.gameObject.setTint('0x757575');
         event.pairs[0].bodyA.gameObject.setCollisionGroup(cannotDrag);
       } 
     });
 
-    this.matter.overlap(stoneWall, foreground, () => {
-      console.log('overlap');
-
-    });
+    // this.matter.overlap(stoneWall, foreground, () => {
+    //   console.log(this)
+    // })
 
     // allows the group 'canDrag' to be movable with the mouse
     this.matter.add.mouseSpring({ length: 1, stiffness: 0.8, collisionFilter: { group: canDrag } });
@@ -125,7 +132,4 @@ class playGame extends Phaser.Scene {
   }
 }
 
-
-
-
-export default playGame;
+export default Level1;
