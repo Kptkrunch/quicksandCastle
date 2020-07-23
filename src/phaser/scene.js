@@ -34,15 +34,18 @@ class playGame extends Phaser.Scene {
 
   create() {
 
+
     // set the group for what items can be manipulated
     var canDrag = this.matter.world.nextGroup();
     var cannotDrag = this.matter.world.nextGroup();
     // collision categories
     var blocks = this.matter.world.nextCategory();
     var platforms = this.matter.world.nextCategory();
+    var noCollide = this.matter.world.nextCategory();
 
     // ? world items ===========================================
     // ? =======================================================
+
     this.add.image(0, 0, 'background')
       .setOrigin(0, 0);
     // const objOptions = { chamfer: 16, density: 30, friction: 0.9, frictionStatic: 0.75, restitution: 0};
@@ -66,19 +69,29 @@ class playGame extends Phaser.Scene {
     // ? platforms that blocks rest on
     platformLong = this.matter.add.image(600, 550, 'platformLong', null, 
       { isStatic: true, friction: 0.9, frictionStatic: 0.75, label: 'platformLong' })
-      .setCollisionGroup(platforms)
+      .setCollisionCategory(platforms)
       .setVisible(false);
 
     // starting platform for blocks
     castleBase = this.matter.add.image(800, 450, 'castleBase', null, 
       { isStatic: false, chamfer: 10, density: 35, friction: 1.0, restitution: 0 })
+      .setCollisionCategory(platforms)
 
     // ? the ground that the player sees
-    foreground = this.add.image(0, 475, 'foreground', {isStatic: true}).setOrigin(0, 0);
+    foreground = this.matter.add.image(0, 475, 'foreground', {isStatic: true, label: 'foreground'}).setOrigin(0, 0)
+      .setCollisionCategory(noCollide)
+      .setIgnoreGravity(true);
 
     // ? collision events ======================================
     // ? =======================================================
 
+    stoneWall.setCollidesWith([ blocks, platforms ]);
+    castleWall.setCollidesWith([ blocks, platforms ]);
+    treasureChest.setCollidesWith([ blocks, platforms ]);
+    castleBase.setCollidesWith([ blocks, platforms ]);
+    foreground.setCollidesWith([noCollide]);
+    platformLong.setCollidesWith([blocks, platforms]);
+    
     this.matter.world.on('collisionstart', function (event, bodyA, bodyB) {
       
       if(bodyB.label === 'platformLong') {
@@ -86,6 +99,11 @@ class playGame extends Phaser.Scene {
         event.pairs[0].bodyA.gameObject.setTint('0x757575');
         event.pairs[0].bodyA.gameObject.setCollisionGroup(cannotDrag);
       } 
+    });
+
+    this.matter.overlap(stoneWall, foreground, () => {
+      console.log('overlap');
+
     });
 
     // allows the group 'canDrag' to be movable with the mouse

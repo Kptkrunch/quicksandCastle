@@ -2,18 +2,24 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    background-image: linear-gradient(skyblue , rgb(104, 122, 203), rgb(71, 71, 183), rgb(71, 71, 183), rgb(193, 124, 13),  rgb(161, 105, 1));
+    background-color: transparent;
 }
 
 .background {
 
-    text-align: "center";
-    background-color: grey;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    background-color: transparent;
     min-width: 1300px;
 }
 
-img {
-
-    margin: auto;
+.title {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-left: 25%;
 }
 
 .title {
