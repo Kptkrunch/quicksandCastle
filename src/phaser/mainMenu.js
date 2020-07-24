@@ -1,6 +1,5 @@
 import Phaser from 'phaser';
 import { sceneTracker } from '../sceneTracker';
-// import { Level1 } from '../phaser/level1';
 import Level1 from '../phaser/level1';
 import BackgroundD from '../assets/sprites/backgroundD.png';
 // import BackgroundN from '../assets/sprites/backgroundN.png';

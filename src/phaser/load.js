@@ -1,7 +1,21 @@
 // import Phaser from 'phaser';
 import { sceneTracker } from '../sceneTracker';
 import MainMenu from '../phaser/mainMenu';
-// import { Level1 } from '../phaser/mainMenu';
+
+import Background from '../assets/sprites/background.jpg';
+import Foreground from '../assets/sprites/foreground.png';
+import CastleWall from '../assets/sprites/castleWall.png';
+import CastleBase from '../assets/sprites/castleBase.png';
+import StoneWall from '../assets/sprites/stoneWall.png';
+import PlatformLong from '../assets/sprites/platformLong.png';
+import TreasureChest from '../assets/sprites/treasureChest.png';
+
+import MudWall from '../assets/sprites/mudWall.png';
+import MudWallLong from '../assets/sprites/mudWallLong.png';
+import MudWallLongH from '../assets/sprites/mudWallLongH.png';
+import StoneWall2 from '../assets/sprites/stoneWall2.png';
+import CastleWallLong from '../assets/sprites/castleWallLong.png';
+import CastleWallLongH from '../assets/sprites/castleWallLongH.png';
 
  export default class LoadScene extends Phaser.Scene {
     constructor() {
@@ -11,7 +25,31 @@ import MainMenu from '../phaser/mainMenu';
     }
 
     preload() {
+            // assets to prepare
+    this.load.image('background', Background);
+    this.load.image('foreground', Foreground);
+    this.load.image('castleWall', CastleWall);
+    this.load.image('castlebase', CastleBase);
+    this.load.image('stoneWall', StoneWall);
+    this.load.image('platformLong', PlatformLong);
+    this.load.image('treasureChest', TreasureChest);
 
+    this.load.image('mudWall', MudWall);
+    this.load.image('mudWallLong', MudWallLong);
+    this.load.image('mudWallLongH', MudWallLongH);
+    this.load.image('stoneWall2', StoneWall2);
+    this.load.image('castleWallLong', CastleWallLong);
+    this.load.image('castleWallLongH', CastleWallLongH);
+
+    this.load.audio('gameMusic', '../public/assets/music/desertTrack.mp3');
+    this.load.audio('crateSound1', '../public/assets/sounds/crateSound1.mp3');
+    this.load.audio('crateSound2', '../public/assets/sounds/crateSound2.mp3');
+    this.load.audio('blockGrabSound', '../public/assets/sounds/blockGrabSound.mp3');
+    this.load.audio('castleWallSound', '../public/assets/sounds/castleWallSound.mp3');
+    this.load.audio('hardCrateSound', '../public/assets/sounds/hardCrateSound.mp3');
+    this.load.audio('metalBlockSound', '../public/assets/sounds/metalBlockSound.mp3');
+
+    // Loading progress bar
         var progressBar = this.add.graphics();
         var progressBox = this.add.graphics();
         progressBox.fillStyle(0x222222, 0.8);

@@ -1,12 +1,5 @@
 import Phaser from 'phaser';
 import { sceneTracker } from '../sceneTracker';
-import Background from '../assets/sprites/background.jpg';
-import Foreground from '../assets/sprites/foreground.png';
-import CastleWall from '../assets/sprites/castleWall.png';
-import StoneWall from '../assets/sprites/stoneWall.png';
-import PlatformLong from '../assets/sprites/platformLong.png';
-import TreasureChest from '../assets/sprites/treasureChest.png';
-import CastleBase from '../assets/sprites/castleBase.png';
 
 var treasureChest;
 var castleWall;
@@ -15,7 +8,7 @@ var stoneWall;
 var platformLong;
 var foreground;
 var background;
-
+var allBlocks;
 export default class Level1 extends Phaser.Scene {
   constructor() {
     super({
@@ -24,27 +17,13 @@ export default class Level1 extends Phaser.Scene {
   }
 
   preload() {
-    // assets to prepare
-    this.load.image('background', Background);
-    this.load.image('foreground', Foreground);
-    this.load.image('castleWall', CastleWall);
-    this.load.image('stoneWall', StoneWall);
-    this.load.image('platformLong', PlatformLong);
-    this.load.image('treasureChest', TreasureChest);
-    this.load.image('castleBase', CastleBase);
-    this.load.audio('gameMusic', '../public/assets/music/desertTrack.mp3');
-    this.load.audio('crateSound1', '../public/assets/sounds/crateSound1.mp3');
-    this.load.audio('crateSound2', '../public/assets/sounds/crateSound2.mp3');
-    this.load.audio('blockGrabSound', '../public/assets/sounds/blockGrabSound.mp3');
-    this.load.audio('castleWallSound', '../public/assets/sounds/castleWallSound.mp3');
-    this.load.audio('hardCrateSound', '../public/assets/sounds/hardCrateSound.mp3');
-    this.load.audio('metalBlockSound', '../public/assets/sounds/metalBlockSound.mp3');
+
   }
 
   create() {
 
     this.cameras.main.fadeIn(1000, 0, 0, 0);
-
+    
     // ? Sounds ================================================
     // ? =======================================================
 
@@ -55,12 +34,12 @@ export default class Level1 extends Phaser.Scene {
     var hardCrateSound = this.sound.add('hardCrateSound', {volume: 1.0});
     var metalBlockSound = this.sound.add('metalBlockSound', {volume: 1.0});
 
-
     this.sound.pauseOnBlur = false;
     this.sound.play('gameMusic', {
         loop: true,
-        
+
     });
+
     // ? world items ===========================================
     // ? =======================================================
 
@@ -88,8 +67,8 @@ export default class Level1 extends Phaser.Scene {
       .setCollisionCategory(blocks);
 
     // treasure chest win condition piece
-    treasureChest = this.matter.add.image(875, 100, 'treasureChest', 
-      { chamfer: 16, density: 40, friction: 0.6, frictionStatic: .75, frictionAir: 0.3, restitution: 0, label: 'treasureChest'})
+    treasureChest = this.matter.add.image(875, 100, 'treasureChest', null,
+      { chamfer: 16, density: 40, friction: 0.6, frictionStatic: .75, frictionAir: 0.05, restitution: 0, label: 'treasureChest'})
       .setCollisionGroup(canDrag)
       .setCollisionCategory(blocks);
 
@@ -103,6 +82,16 @@ export default class Level1 extends Phaser.Scene {
     castleBase = this.matter.add.image(800, 450, 'castleBase', null, 
       { isStatic: false, chamfer: 10, density: 35, friction: 1.0, restitution: 0 })
       .setCollisionCategory(platforms)
+
+    // allBlocks = ['mudWall', 'MudWallLong', 'MudWallLongH', 'CastleWallLong', 'CastleWallLongH', 'StoneWall2'];
+    // let makeBlocks = () => {
+
+    //   for(let i = 0; i < 5; i++) {
+    //     let index = Math.floor(Math.random() * allBlocks.length)
+    //     this.matter.add.image(Math.random() * 800, Math.random() * 100, allBlocks[index], null)
+    //   }
+    // }
+    // makeBlocks();
 
     // ? the ground that the player sees
     foreground = this.matter.add.image(0, 475, 'foreground', {isStatic: true, label: 'foreground'}).setOrigin(0, 0)
@@ -127,24 +116,10 @@ export default class Level1 extends Phaser.Scene {
         event.pairs[0].bodyA.gameObject.setTint('0x757575');
         event.pairs[0].bodyA.gameObject.setCollisionGroup(cannotDrag);
       } 
-
-      if(bodyA.label === castleWall) {
-        console.log(bodyA.label)
-        castleWallSound.play();
-      }
     });
 
-
-    // var crateSound1 = this.sound.add('crateSound1', {volume: 3.0});
-    // var crateSound2 = this.sound.add('crateSound2', {volume: 3.0});
-    // var blockGrabSound = this.sound.add('blockGrabSound', {volume: 3.0});
-    // var castleWallSound = this.sound.add('castleWallSound', {volume: 3.0});
-    // var hardCrateSound = this.sound.add('hardCrateSound', {volume: 3.0});
-    // var metalBlockSound = this.sound.add('metalBlockSound', {volume: 3.0});
     this.matter.world.on('collisionstart', function (event, block, platforms) {
-        // if(block.label === 'castleWall') {
-        //   castleWallSound.play();
-        // } 
+
         switch(block.label) {
 
           case 'castleWall':
@@ -167,7 +142,7 @@ export default class Level1 extends Phaser.Scene {
 
     // causes the ground to start sinking
     setTimeout(() => {
-
+      
       this.tweens.add({
         targets: platformLong,
         y: 1000,
@@ -177,3 +152,43 @@ export default class Level1 extends Phaser.Scene {
     }, 10000);
   }
 }
+
+
+// import Background from '../assets/sprites/background.jpg';
+// import Foreground from '../assets/sprites/foreground.png';
+// import CastleWall from '../assets/sprites/castleWall.png';
+// import CastleBase from '../assets/sprites/castleBase.png';
+// import StoneWall from '../assets/sprites/stoneWall.png';
+// import PlatformLong from '../assets/sprites/platformLong.png';
+// import TreasureChest from '../assets/sprites/treasureChest.png';
+
+// import MudWall from '../assets/sprites/mudWall.png';
+// import MudWallLong from '../assets/sprites/mudWallLong.png';
+// import MudWallLongH from '../assets/sprites/mudWallLongH.png';
+// import StoneWall2 from '../assets/sprites/stoneWall2.png';
+// import CastleWallLong from '../assets/sprites/castleWallLong.png';
+// import CastleWallLongH from '../assets/sprites/castleWallLongH.png';
+
+    // assets to prepare
+    // this.load.image('background', Background);
+    // this.load.image('foreground', Foreground);
+    // this.load.image('castleWall', CastleWall);
+    // this.load.image('castlebase', CastleBase);
+    // this.load.image('stoneWall', StoneWall);
+    // this.load.image('platformLong', PlatformLong);
+    // this.load.image('treasureChest', TreasureChest);
+
+    // this.load.image('mudWall', MudWall);
+    // this.load.image('mudWallLong', MudWallLong);
+    // this.load.image('mudWallLongH', MudWallLongH);
+    // this.load.image('stoneWall2', StoneWall2);
+    // this.load.image('castleWallLong', CastleWallLong);
+    // this.load.image('castleWallLongH', CastleWallLongH);
+
+    // this.load.audio('gameMusic', '../public/assets/music/desertTrack.mp3');
+    // this.load.audio('crateSound1', '../public/assets/sounds/crateSound1.mp3');
+    // this.load.audio('crateSound2', '../public/assets/sounds/crateSound2.mp3');
+    // this.load.audio('blockGrabSound', '../public/assets/sounds/blockGrabSound.mp3');
+    // this.load.audio('castleWallSound', '../public/assets/sounds/castleWallSound.mp3');
+    // this.load.audio('hardCrateSound', '../public/assets/sounds/hardCrateSound.mp3');
+    // this.load.audio('metalBlockSound', '../public/assets/sounds/metalBlockSound.mp3');
