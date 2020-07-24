@@ -33,6 +33,13 @@ export default class MainMenu extends Phaser.Scene {
 
     create() {
 
+        let startButtonSound = this.sound.add('startButtonSound', {volume: 3.0});
+
+        let menuMusic = this.sound.add('menuMusic', {
+            loop: true
+        });
+        menuMusic.play();
+
         backgroundD = this.add.image(0, 0, 'backgroundD').setOrigin(0, 0);
         title = this.add.image(600, 200, 'title');
         startButton = this.add.image(600, 400, 'startButton')
@@ -40,20 +47,19 @@ export default class MainMenu extends Phaser.Scene {
 
         startButton.on('pointerdown', () => {
             console.log('hooray');
+            
             this.scene.add(sceneTracker.scenes.level1, Level1, false);
-            this.scene.start(sceneTracker.scenes.level1);
             startButtonSound.play();
             menuMusic.stop();
+            this.cameras.main.fadeOut(1000);
+            
+            this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
+                this.time.delayedCall(1000, () => {
+                    this.scene.start(sceneTracker.scenes.level1);
+                    
+
+                })
+            })
         })
-
-        let startButtonSound = this.sound.add('startButtonSound', {volume: 3.0});
-
-        let menuMusic = this.sound.add('menuMusic', {
-            loop: true
-        });
-        menuMusic.play();
-    }
-
-    update() {
     }
 }

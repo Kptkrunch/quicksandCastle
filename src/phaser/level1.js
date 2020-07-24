@@ -33,15 +33,37 @@ export default class Level1 extends Phaser.Scene {
     this.load.image('treasureChest', TreasureChest);
     this.load.image('castleBase', CastleBase);
     this.load.audio('gameMusic', '../public/assets/music/desertTrack.mp3');
-    this.load.audio('gameMusic', '../public/assets/sounds/crateSound1.mp3');
-    this.load.audio('gameMusic', '../public/assets/sounds/crateSound2.mp3');
-    this.load.audio('gameMusic', '../public/assets/sounds/blockGrabSound.mp3');
-    this.load.audio('gameMusic', '../public/assets/sounds/castleWallSound.mp3');
-    this.load.audio('gameMusic', '../public/assets/sounds/hardCrateSound.mp3');
-    this.load.audio('gameMusic', '../public/assets/sounds/metalBlockSound.mp3');
+    this.load.audio('crateSound1', '../public/assets/sounds/crateSound1.mp3');
+    this.load.audio('crateSound2', '../public/assets/sounds/crateSound2.mp3');
+    this.load.audio('blockGrabSound', '../public/assets/sounds/blockGrabSound.mp3');
+    this.load.audio('castleWallSound', '../public/assets/sounds/castleWallSound.mp3');
+    this.load.audio('hardCrateSound', '../public/assets/sounds/hardCrateSound.mp3');
+    this.load.audio('metalBlockSound', '../public/assets/sounds/metalBlockSound.mp3');
   }
 
   create() {
+
+    this.cameras.main.fadeIn(1000, 0, 0, 0);
+
+    // ? Sounds ================================================
+    // ? =======================================================
+
+    var crateSound1 = this.sound.add('crateSound1', {volume: 1.0});
+    var crateSound2 = this.sound.add('crateSound2', {volume: 1.0});
+    var blockGrabSound = this.sound.add('blockGrabSound', {volume: 1.0});
+    var castleWallSound = this.sound.add('castleWallSound', {volume: 1.0});
+    var hardCrateSound = this.sound.add('hardCrateSound', {volume: 1.0});
+    var metalBlockSound = this.sound.add('metalBlockSound', {volume: 1.0});
+
+
+    this.sound.pauseOnBlur = false;
+    this.sound.play('gameMusic', {
+        loop: true,
+        
+    });
+    // ? world items ===========================================
+    // ? =======================================================
+
     // set the group for what items can be manipulated
     var canDrag = this.matter.world.nextGroup();
     var cannotDrag = this.matter.world.nextGroup();
@@ -49,9 +71,6 @@ export default class Level1 extends Phaser.Scene {
     var blocks = this.matter.world.nextCategory();
     var platforms = this.matter.world.nextCategory();
     var noCollide = this.matter.world.nextCategory();
-
-    // ? world items ===========================================
-    // ? =======================================================
 
     background = this.add.image(0, 0, 'background')
       .setOrigin(0, 0);
@@ -108,19 +127,37 @@ export default class Level1 extends Phaser.Scene {
         event.pairs[0].bodyA.gameObject.setTint('0x757575');
         event.pairs[0].bodyA.gameObject.setCollisionGroup(cannotDrag);
       } 
+
+      if(bodyA.label === castleWall) {
+        console.log(bodyA.label)
+        castleWallSound.play();
+      }
     });
-    // this.matter.world.on('collisionstart', function (event, bodyA, bodyB) {
-      
-    //   if(bodyB.label === 'foreground') {
 
-    //     event.pairs[0].bodyA.gameObject.setTint('0x757575');
-    //     event.pairs[0].bodyA.gameObject.setCollisionGroup(cannotDrag);
-    //   } 
-    // });
 
-    // this.matter.overlap(stoneWall, foreground, () => {
-    //   console.log(this)
-    // })
+    // var crateSound1 = this.sound.add('crateSound1', {volume: 3.0});
+    // var crateSound2 = this.sound.add('crateSound2', {volume: 3.0});
+    // var blockGrabSound = this.sound.add('blockGrabSound', {volume: 3.0});
+    // var castleWallSound = this.sound.add('castleWallSound', {volume: 3.0});
+    // var hardCrateSound = this.sound.add('hardCrateSound', {volume: 3.0});
+    // var metalBlockSound = this.sound.add('metalBlockSound', {volume: 3.0});
+    this.matter.world.on('collisionstart', function (event, block, platforms) {
+        // if(block.label === 'castleWall') {
+        //   castleWallSound.play();
+        // } 
+        switch(block.label) {
+
+          case 'castleWall':
+            crateSound2.play();
+            break;
+          case 'treasureChest':
+            crateSound1.play();
+            break;
+          case 'stoneWall':
+            castleWallSound.play();
+            break;
+        }
+    });
 
     // allows the group 'canDrag' to be movable with the mouse
     this.matter.add.mouseSpring({ length: 1, stiffness: 0.8, collisionFilter: { group: canDrag } });
@@ -138,13 +175,5 @@ export default class Level1 extends Phaser.Scene {
         ease: 'power2',
       });
     }, 10000);
-
-    // ? Sounds ================================================
-    // ? =======================================================
-
-    this.sound.pauseOnBlur = false;
-    this.sound.play('gameMusic', {
-        loop: true
-    });
   }
 }
