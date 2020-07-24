@@ -1,5 +1,12 @@
 import Phaser from 'phaser';
 import { sceneTracker } from '../sceneTracker';
+import CastleBase from '../assets/sprites/castleBase.png';
+import MudWall from '../assets/sprites/mudWall.png';
+import MudWallLong from '../assets/sprites/mudWallLong.png';
+import MudWallLongH from '../assets/sprites/mudWallLongH.png';
+import StoneWall2 from '../assets/sprites/stoneWall2.png';
+import CastleWallLong from '../assets/sprites/castleWallLong.png';
+import CastleWallLongH from '../assets/sprites/castleWallLongH.png';
 
 var treasureChest;
 var castleWall;
@@ -9,6 +16,8 @@ var platformLong;
 var foreground;
 var background;
 var allBlocks;
+var randomBlock;
+
 export default class Level1 extends Phaser.Scene {
   constructor() {
     super({
@@ -17,11 +26,17 @@ export default class Level1 extends Phaser.Scene {
   }
 
   preload() {
-
+    this.load.image('castleBase', CastleBase);
+    this.load.image('mudWall', MudWall);
+    this.load.image('mudWallLong', MudWallLong);
+    this.load.image('mudWallLongH', MudWallLongH);
+    this.load.image('stoneWall2', StoneWall2);
+    this.load.image('castleWallLong', CastleWallLong);
+    this.load.image('castleWallLongH', CastleWallLongH);
   }
 
   create() {
-
+    // scene start effect
     this.cameras.main.fadeIn(1000, 0, 0, 0);
     
     // ? Sounds ================================================
@@ -37,7 +52,6 @@ export default class Level1 extends Phaser.Scene {
     this.sound.pauseOnBlur = false;
     this.sound.play('gameMusic', {
         loop: true,
-
     });
 
     // ? world items ===========================================
@@ -79,19 +93,25 @@ export default class Level1 extends Phaser.Scene {
       .setVisible(false);
 
     // starting platform for blocks
-    castleBase = this.matter.add.image(800, 450, 'castleBase', null, 
+    castleBase = this.matter.add.image(800, 400, 'castleBase', null,
       { isStatic: false, chamfer: 10, density: 35, friction: 1.0, restitution: 0 })
       .setCollisionCategory(platforms)
 
-    // allBlocks = ['mudWall', 'MudWallLong', 'MudWallLongH', 'CastleWallLong', 'CastleWallLongH', 'StoneWall2'];
-    // let makeBlocks = () => {
-
-    //   for(let i = 0; i < 5; i++) {
-    //     let index = Math.floor(Math.random() * allBlocks.length)
-    //     this.matter.add.image(Math.random() * 800, Math.random() * 100, allBlocks[index], null)
-    //   }
-    // }
-    // makeBlocks();
+    // ? make it rain blocks
+    allBlocks = ['mudWall', 'stoneWall', 'castleWall'];
+    let makeBlocks = () => {
+      
+      for(let i = 0; i < 5; i++) {
+        let index = Math.floor(Math.random() * allBlocks.length);
+        randomBlock = this.matter.add.image((Math.random() * 100) + 700, (Math.random() * 200) - 400, allBlocks[index], null, 
+          {chamfer: 16, density: 30, friction: 0.9, frictionStatic: 0.75, frictionAir: 0.05, restitution: 0, label: 'randomBlock'})
+          .setCollisionGroup(canDrag)
+          .setCollisionCategory(blocks);
+      }
+    }
+    makeBlocks();
+    randomBlock.setCollisionGroup(canDrag);
+    randomBlock.setCollisionCategory(blocks);
 
     // ? the ground that the player sees
     foreground = this.matter.add.image(0, 475, 'foreground', {isStatic: true, label: 'foreground'}).setOrigin(0, 0)
@@ -102,12 +122,14 @@ export default class Level1 extends Phaser.Scene {
     // ? =======================================================
 
     // what objects collide with 
-    stoneWall.setCollidesWith([ blocks, platforms ]);
-    castleWall.setCollidesWith([ blocks, platforms ]);
-    treasureChest.setCollidesWith([ blocks, platforms ]);
-    castleBase.setCollidesWith([ blocks, platforms ]);
+    stoneWall.setCollidesWith([blocks, platforms ]);
+    castleWall.setCollidesWith([blocks, platforms ]);
+    treasureChest.setCollidesWith([blocks, platforms ]);
+    castleBase.setCollidesWith([blocks, platforms ]);
     foreground.setCollidesWith([noCollide]);
-    platformLong.setCollidesWith([blocks, platforms]);
+    platformLong.setCollidesWith([blocks, platforms ]);
+    randomBlock.setCollidesWith([blocks, platforms ]);
+
 
     this.matter.world.on('collisionstart', function (event, bodyA, bodyB) {
       
@@ -130,6 +152,12 @@ export default class Level1 extends Phaser.Scene {
             break;
           case 'stoneWall':
             castleWallSound.play();
+            break;
+          case 'randomBlock':
+            castleWallSound.play();
+            break;
+          case 'mudWall':
+            crateSound1.play();
             break;
         }
     });

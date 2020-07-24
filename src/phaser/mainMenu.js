@@ -2,7 +2,6 @@ import Phaser from 'phaser';
 import { sceneTracker } from '../sceneTracker';
 import Level1 from '../phaser/level1';
 import BackgroundD from '../assets/sprites/backgroundD.png';
-// import BackgroundN from '../assets/sprites/backgroundN.png';
 import Title from '../assets/sprites/title.png';
 import StartButton from '../assets/sprites/startButton.png';
 
@@ -18,8 +17,6 @@ export default class MainMenu extends Phaser.Scene {
     }
 
     init(data) {
-
-        console.log('I got it');
     }
 
     preload() {
@@ -45,18 +42,18 @@ export default class MainMenu extends Phaser.Scene {
             .setInteractive();
 
         startButton.on('pointerdown', () => {
-            console.log('hooray');
             
             this.scene.add(sceneTracker.scenes.level1, Level1, false);
+
             startButtonSound.play();
             menuMusic.stop();
-            this.cameras.main.fadeOut(1000);
-            
-            this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
-                this.time.delayedCall(1000, () => {
-                    this.scene.start(sceneTracker.scenes.level1);
-                    
 
+            this.cameras.main.fadeOut(1000);
+            this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
+
+                this.time.delayedCall(1000, () => {
+
+                    this.scene.start(sceneTracker.scenes.level1);
                 })
             })
         })

@@ -26,28 +26,28 @@ import CastleWallLongH from '../assets/sprites/castleWallLongH.png';
 
     preload() {
             // assets to prepare
-    this.load.image('background', Background);
-    this.load.image('foreground', Foreground);
-    this.load.image('castleWall', CastleWall);
-    this.load.image('castlebase', CastleBase);
-    this.load.image('stoneWall', StoneWall);
-    this.load.image('platformLong', PlatformLong);
-    this.load.image('treasureChest', TreasureChest);
+        this.load.image('background', Background);
+        this.load.image('foreground', Foreground);
+        this.load.image('castleWall', CastleWall);
+        this.load.image('castlebase', CastleBase);
+        this.load.image('stoneWall', StoneWall);
+        this.load.image('platformLong', PlatformLong);
+        this.load.image('treasureChest', TreasureChest);
 
-    this.load.image('mudWall', MudWall);
-    this.load.image('mudWallLong', MudWallLong);
-    this.load.image('mudWallLongH', MudWallLongH);
-    this.load.image('stoneWall2', StoneWall2);
-    this.load.image('castleWallLong', CastleWallLong);
-    this.load.image('castleWallLongH', CastleWallLongH);
+        this.load.image('mudWall', MudWall);
+        this.load.image('mudWallLong', MudWallLong);
+        this.load.image('mudWallLongH', MudWallLongH);
+        this.load.image('stoneWall2', StoneWall2);
+        this.load.image('castleWallLong', CastleWallLong);
+        this.load.image('castleWallLongH', CastleWallLongH);
 
-    this.load.audio('gameMusic', '../public/assets/music/desertTrack.mp3');
-    this.load.audio('crateSound1', '../public/assets/sounds/crateSound1.mp3');
-    this.load.audio('crateSound2', '../public/assets/sounds/crateSound2.mp3');
-    this.load.audio('blockGrabSound', '../public/assets/sounds/blockGrabSound.mp3');
-    this.load.audio('castleWallSound', '../public/assets/sounds/castleWallSound.mp3');
-    this.load.audio('hardCrateSound', '../public/assets/sounds/hardCrateSound.mp3');
-    this.load.audio('metalBlockSound', '../public/assets/sounds/metalBlockSound.mp3');
+        this.load.audio('gameMusic', '../public/assets/music/desertTrack.mp3');
+        this.load.audio('crateSound1', '../public/assets/sounds/crateSound1.mp3');
+        this.load.audio('crateSound2', '../public/assets/sounds/crateSound2.mp3');
+        this.load.audio('blockGrabSound', '../public/assets/sounds/blockGrabSound.mp3');
+        this.load.audio('castleWallSound', '../public/assets/sounds/castleWallSound.mp3');
+        this.load.audio('hardCrateSound', '../public/assets/sounds/hardCrateSound.mp3');
+        this.load.audio('metalBlockSound', '../public/assets/sounds/metalBlockSound.mp3');
 
     // Loading progress bar
         var progressBar = this.add.graphics();
